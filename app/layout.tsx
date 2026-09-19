@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Notes - Quiz",
+  title: "Smart Notes → Quiz",
   description: "Turn your notes into interactive quizzes.",
   icons: {
     icon: "/favicon.png",
