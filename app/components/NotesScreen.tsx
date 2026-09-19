@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ChangeEvent } from "react";
 import Image from "next/image";
@@ -34,49 +34,45 @@ export default function NotesScreen({
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <header className="border-b bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-       <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
+        <div className="flex w-full items-center gap-2 sm:w-auto sm:gap-3">
  <Image
   src="/smart-notes-logo.png"
   alt="Smart Notes logo"
   width={790}
   height={278}
-  className="h-auto w-64 object-contain"
+  className="h-auto w-48 object-contain sm:w-64"
 />
 </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowHistory(true)}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
-            >
+className="flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium transition hover:bg-slate-50 sm:flex-none sm:px-4"            >
               📊 History
             </button>
 
-            <div className="rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600">
+            <div className="flex-1 rounded-full bg-blue-50 px-3 py-2 text-center text-sm font-medium text-blue-600 sm:flex-none sm:px-4">
               Quiz Generator
             </div>
           </div>
         </div>
       </header>
-
-      <section className="mx-auto max-w-6xl px-6 py-12">
+      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-block rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
             AI Powered Learning
           </span>
 
-          <h2 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="mt-5 text-3xl font-bold tracking-tight sm:mt-6 sm:text-5xl">
             Turn your notes into a quiz
           </h2>
-
-          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:mt-5 sm:text-lg sm:leading-8">
             Add your study notes and Smart Notes will help you create
             practice questions so you can test your knowledge.
           </p>
         </div>
-
-        <div className="mx-auto mt-12 max-w-3xl rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="mx-auto mt-8 w-full max-w-3xl rounded-2xl border bg-white p-4 shadow-sm sm:mt-12 sm:p-6">
           <div className="mb-6">
             <h3 className="text-xl font-semibold">
               Add your notes
@@ -97,8 +93,7 @@ export default function NotesScreen({
           <div className="mt-5">
             <label
               htmlFor="notes-file"
-              className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center transition hover:border-blue-400 hover:bg-blue-50"
-            >
+className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center transition hover:border-blue-400 hover:bg-blue-50 sm:p-6"            >
               <div className="text-3xl">
                 📁
               </div>
@@ -174,7 +169,7 @@ export default function NotesScreen({
           </div>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-3xl gap-4 sm:grid-cols-3">
+        <div className="mx-auto mt-8 grid w-full max-w-3xl gap-4 sm:mt-12 sm:grid-cols-3">
           <div className="rounded-xl border bg-white p-5">
             <div className="text-2xl">
               📝
