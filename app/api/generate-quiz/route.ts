@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
+import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit";
 
-const rateLimitMap = new Map<string, number[]>();
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
 
-const RATE_LIMIT = 5;
-const RATE_WINDOW = 60 * 1000; // 1 minute
+const ratelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  analytics: true,
+});
 
 export async function POST(request: Request) {
   try {
@@ -12,15 +20,9 @@ export async function POST(request: Request) {
       request.headers.get("x-real-ip") ||
       "unknown";
 
-    const now = Date.now();
+    const { success } = await ratelimit.limit(`quiz:${ip}`);
 
-    const timestamps = rateLimitMap.get(ip) || [];
-
-    const recentRequests = timestamps.filter(
-      (timestamp) => now - timestamp < RATE_WINDOW
-    );
-
-    if (recentRequests.length >= RATE_LIMIT) {
+    if (!success) {
       return NextResponse.json(
         {
           error: "Too many requests. Please try again later.",
@@ -28,9 +30,6 @@ export async function POST(request: Request) {
         { status: 429 }
       );
     }
-
-    recentRequests.push(now);
-    rateLimitMap.set(ip, recentRequests);
 
     const body = await request.json();
 
@@ -69,52 +68,27 @@ export async function POST(request: Request) {
       questions: [
         {
           question: "What do computers process?",
-          options: [
-            "Data",
-            "Water",
-            "Food",
-            "Electricity",
-          ],
+          options: ["Data", "Water", "Food", "Electricity"],
           correctAnswer: "Data",
         },
         {
           question: "What does RAM store?",
-          options: [
-            "Information",
-            "Fuel",
-            "Sound",
-            "Paper",
-          ],
+          options: ["Information", "Fuel", "Sound", "Paper"],
           correctAnswer: "Information",
         },
         {
           question: "What does the CPU execute?",
-          options: [
-            "Instructions",
-            "Pictures",
-            "Books",
-            "Passwords",
-          ],
+          options: ["Instructions", "Pictures", "Books", "Passwords"],
           correctAnswer: "Instructions",
         },
         {
           question: "What creates useful results?",
-          options: [
-            "Software",
-            "Keyboard",
-            "Monitor",
-            "Mouse",
-          ],
+          options: ["Software", "Keyboard", "Monitor", "Mouse"],
           correctAnswer: "Software",
         },
         {
           question: "Which component stores information?",
-          options: [
-            "RAM",
-            "Monitor",
-            "Keyboard",
-            "Mouse",
-          ],
+          options: ["RAM", "Monitor", "Keyboard", "Mouse"],
           correctAnswer: "RAM",
         },
       ],
