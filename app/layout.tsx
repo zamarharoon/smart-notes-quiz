@@ -15,6 +15,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Smart Notes → Quiz",
   description: "Turn your notes into interactive quizzes.",
+  keywords: [
+    "smart notes",
+    "quiz generator",
+    "study notes",
+    "online quiz",
+    "learning tool",
+  ],
+  authors: [{ name: "Smart Notes" }],
+  creator: "Smart Notes",
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: "/favicon.png",
   },
