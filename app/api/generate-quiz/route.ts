@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Redis } from "@upstash/redis";
 import { Ratelimit } from "@upstash/ratelimit";
+import { generateQuizFromNotes } from "@/app/lib/quizGenerator";
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -61,40 +62,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // TEMPORARY TEST MODE
-    // OpenAI is NOT called here.
+    const questions = generateQuizFromNotes(trimmedNotes);
 
-    const quiz = {
-      questions: [
+    if (questions.length < 4) {
+      return NextResponse.json(
         {
-          question: "What do computers process?",
-          options: ["Data", "Water", "Food", "Electricity"],
-          correctAnswer: "Data",
+          error:
+            "Not enough distinct information to generate a 4-option quiz. Please provide more detailed notes.",
         },
-        {
-          question: "What does RAM store?",
-          options: ["Information", "Fuel", "Sound", "Paper"],
-          correctAnswer: "Information",
-        },
-        {
-          question: "What does the CPU execute?",
-          options: ["Instructions", "Pictures", "Books", "Passwords"],
-          correctAnswer: "Instructions",
-        },
-        {
-          question: "What creates useful results?",
-          options: ["Software", "Keyboard", "Monitor", "Mouse"],
-          correctAnswer: "Software",
-        },
-        {
-          question: "Which component stores information?",
-          options: ["RAM", "Monitor", "Keyboard", "Mouse"],
-          correctAnswer: "RAM",
-        },
-      ],
-    };
+        { status: 400 }
+      );
+    }
 
-    return NextResponse.json(quiz);
+    return NextResponse.json({
+      questions,
+    });
   } catch (error) {
     console.error("Quiz generation error:", error);
 
