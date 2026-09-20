@@ -28,6 +28,26 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  openGraph: {
+    title: "Smart Notes → Quiz",
+    description: "Turn your notes into interactive quizzes.",
+    type: "website",
+    siteName: "Smart Notes → Quiz",
+    images: [
+      {
+        url: "/smart-notes-logo.png",
+        width: 790,
+        height: 278,
+        alt: "Smart Notes logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Smart Notes → Quiz",
+    description: "Turn your notes into interactive quizzes.",
+    images: ["/smart-notes-logo.png"],
+  },
   icons: {
     icon: "/favicon.png",
   },
