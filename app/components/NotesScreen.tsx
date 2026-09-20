@@ -211,8 +211,32 @@ className="flex cursor-pointer flex-col items-center justify-center rounded-xl b
               Test yourself and see your results.
             </p>
           </div>
-        </div>
+               </div>
       </section>
+
+      <footer className="border-t bg-white px-4 py-6 sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-sm text-slate-500 sm:flex-row">
+          <p>© 2026 Smart Notes → Quiz</p>
+
+          <div className="flex items-center gap-4">
+            <a
+              href="/privacy"
+              className="transition hover:text-slate-900"
+            >
+              Privacy Policy
+            </a>
+
+            <span aria-hidden="true">•</span>
+
+            <a
+              href="/terms"
+              className="transition hover:text-slate-900"
+            >
+              Terms of Use
+            </a>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
