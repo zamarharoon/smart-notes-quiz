@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://smart-notes-quiz.vercel.app"),
   title: "Smart Notes → Quiz",
   description: "Turn your notes into interactive quizzes.",
   keywords: [
