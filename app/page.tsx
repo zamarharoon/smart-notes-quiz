@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import {
-  generateQuizFromNotes,
   QuizQuestion,
 } from "./lib/quizGenerator";
 import NotesScreen from "./components/NotesScreen";
@@ -322,49 +321,63 @@ useEffect(() => {
    * GENERATE QUIZ
    * =========================
    */
+const handleGenerateQuiz = async () => {
+  if (!notes.trim()) {
+    alert("Please enter notes or upload a file first.");
+    return;
+  }
 
-  const handleGenerateQuiz = () => {
-    if (!notes.trim()) {
+  if (notes.trim().length < 50) {
+    alert(
+      "Please enter at least 50 characters of notes to generate a good quiz."
+    );
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/generate-quiz", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        notes: notes.trim(),
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
       alert(
-        "Please enter notes or upload a file first."
+        data.error ||
+          "Failed to generate quiz. Please try again."
       );
-      
-
       return;
     }
-    if (notes.trim().length < 50) {
-  alert(
-    "Please enter at least 50 characters of notes to generate a good quiz."
-  );
 
-  return;
-}
+    if (!data.questions || data.questions.length < 4) {
+      alert(
+        "Not enough questions were generated. Please add more detailed notes."
+      );
+      return;
+    }
 
-    const generatedQuestions =
-      generateQuizFromNotes(notes);
-
-  if (generatedQuestions.length === 0) {
-  alert(
-    "Not enough distinct information to generate a 4-option quiz. Please add more varied facts."
-  );
-
-  return;
-}
-
-    setQuizQuestions(
-      generatedQuestions
-    );
-
+    setQuizQuestions(data.questions);
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setScore(0);
     setQuizStarted(true);
 
-    setQuizCompleted(false);
+    console.log("Quiz source:", data.source);
+  } catch (error) {
+    console.error("Quiz request failed:", error);
 
-    setCurrentQuestion(0);
+    alert(
+      "Could not connect to the quiz generator. Please try again."
+    );
+  }
+};
 
-    setSelectedAnswer(null);
-
-    setScore(0);
-  };
 
   /*
    * =========================
