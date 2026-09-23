@@ -1,232 +1,468 @@
-# Smart Notes → Quiz
+\# Smart Notes → Quiz
 
-A beginner-friendly Next.js web app that turns study notes into interactive quizzes.
 
-## Live Demo
 
-https://smart-notes-quiz.vercel.app/
+An AI-powered full-stack web application that turns your study notes into interactive multiple-choice quizzes using Google Gemini AI.
 
-## GitHub
 
-https://github.com/zamarharoon/smart-notes-quiz
 
-## About
+\## Features
 
-Smart Notes → Quiz allows users to enter study notes or upload a file and generate a multiple-choice quiz from the provided content.
 
-The project was built as a practical full-stack Next.js application with a focus on usability, validation, security, and responsive design.
 
-## Features
+\* Enter notes manually or upload PDF, DOCX, or TXT files
 
-* Enter notes manually
-* Upload PDF, DOCX, or TXT files
-* Maximum file size: 10 MB
-* Generate multiple-choice quizzes from notes
-* Questions are generated from the user's provided content
-* Four answer options per question
-* Immediate answer feedback
-* Quiz score and result screen
-* Try Again functionality
-* Quiz History
-* Clear History
-* Responsive mobile-friendly interface
-* Privacy Policy and Terms pages
-* Rate limiting for the quiz API
+\* Generate AI-powered quizzes using Google Gemini
 
-## Tech Stack
+\* Four-option multiple-choice questions
 
-* Next.js 16
-* React 19
-* TypeScript
-* Tailwind CSS
-* Next.js App Router
-* PDF.js
-* Mammoth
-* Upstash Redis
-* Upstash Ratelimit
+\* Instant answer feedback
 
-## How It Works
+\* Quiz results and score tracking
 
-1. The user enters study notes or uploads a supported file.
-2. The application extracts the text when a file is uploaded.
-3. The notes are sent to the `/api/generate-quiz` API route.
-4. The server validates the request.
-5. Rate limiting is applied to the API request.
-6. The local quiz generator creates questions from the supplied notes.
-7. The generated quiz is displayed in the browser.
-8. The user answers the questions and receives immediate feedback.
-9. The final score is displayed and the quiz can be saved in History.
+\* Try Again functionality
 
-## Current Quiz Generation
+\* Quiz history stored in the browser
 
-The current version uses a **local rule-based quiz generator**.
+\* Server-side input validation
 
-OpenAI generation is not currently active because API credits are not configured for the project. The application therefore generates quizzes locally from the user's notes without requiring an external AI API call.
+\* Server-side Gemini API integration
 
-## File Upload
+\* Local fallback quiz generator if AI generation is unavailable
 
-Supported file types:
+\* Upstash Redis API rate limiting
 
-* PDF
-* DOCX
-* TXT
+\* Security headers
 
-Maximum upload size:
+\* HTTPS deployment with Vercel
 
-**10 MB**
+\* Privacy and Terms pages
 
-## Security
+\* Responsive interface for desktop and mobile devices
+
+
+
+\## How It Works
+
+
+
+1\. Enter or upload your study notes.
+
+2\. The frontend sends the notes to the Next.js backend API.
+
+3\. The backend validates the request.
+
+4\. The backend sends the notes to Google Gemini AI.
+
+5\. Gemini generates structured quiz questions.
+
+6\. The backend validates the AI response.
+
+7\. The quiz is returned to the frontend.
+
+8\. If AI generation is unavailable, the application can use a local fallback generator.
+
+9\. The user answers the quiz and receives feedback and a final score.
+
+10\. Quiz history is stored locally in the browser.
+
+
+
+\## Backend
+
+
+
+The application uses a Next.js server-side API route as its backend:
+
+
+
+`app/api/generate-quiz/route.ts`
+
+
+
+The backend is responsible for:
+
+
+
+\* Receiving quiz-generation requests
+
+\* Validating incoming notes
+
+\* Applying API rate limiting
+
+\* Calling Google Gemini AI securely
+
+\* Validating the generated quiz response
+
+\* Handling AI failures with a local fallback
+
+\* Keeping the Gemini API key on the server side
+
+
+
+The Gemini API key is stored in environment variables and is never exposed directly to the browser.
+
+
+
+\## AI Quiz Generation
+
+
+
+The application uses Google Gemini for quiz generation through the Google GenAI SDK.
+
+
+
+The current AI model configured for quiz generation is:
+
+
+
+`gemini-3.5-flash-lite`
+
+
+
+The application also includes a local rule-based fallback generator so that quiz generation can still work when AI generation is unavailable.
+
+
+
+\## Security
+
+
 
 The application includes several security measures:
 
-* Upstash Redis rate limiting
-* Maximum of 5 quiz API requests per minute
-* Input validation
-* Maximum notes length of 20,000 characters
-* Environment variables for sensitive configuration
-* `.env.local` excluded from Git
-* Security headers
-* HTTPS deployment through Vercel
-* Generic server error responses
 
-## Project Structure
+
+\* Server-side Gemini API calls
+
+\* Environment variables for API secrets
+
+\* Upstash Redis rate limiting
+
+\* Request validation
+
+\* Maximum notes length validation
+
+\* File upload size validation
+
+\* Security response headers
+
+\* `.env.local` excluded from Git
+
+\* API key protection
+
+
+
+The application currently limits quiz-generation requests to 5 requests per minute per client IP.
+
+
+
+\## File Support
+
+
+
+Supported upload formats:
+
+
+
+\* PDF
+
+\* DOCX
+
+\* TXT
+
+
+
+Maximum file size:
+
+
+
+10 MB
+
+
+
+\## Tech Stack
+
+
+
+\### Frontend
+
+
+
+\* Next.js
+
+\* React
+
+\* TypeScript
+
+\* Tailwind CSS
+
+
+
+\### Backend
+
+
+
+\* Next.js App Router API Routes
+
+\* Server-side validation
+
+\* Upstash Redis
+
+
+
+\### AI
+
+
+
+\* Google Gemini AI
+
+\* Google GenAI SDK
+
+
+
+\### File Processing
+
+
+
+\* PDF.js
+
+\* Mammoth
+
+
+
+\### Deployment
+
+
+
+\* Vercel
+
+\* GitHub
+
+\* HTTPS
+
+
+
+\## Project Structure
+
+
 
 ```text
+
 smart-notes-quiz/
+
 ├── app/
+
 │   ├── api/
+
 │   │   └── generate-quiz/
+
 │   │       └── route.ts
+
 │   ├── components/
-│   │   ├── HistoryScreen.tsx
+
 │   │   ├── NotesScreen.tsx
+
 │   │   ├── QuizScreen.tsx
-│   │   └── ResultScreen.tsx
+
+│   │   ├── ResultScreen.tsx
+
+│   │   └── HistoryScreen.tsx
+
 │   ├── lib/
+
 │   │   ├── pdf.ts
+
 │   │   └── quizGenerator.ts
-│   ├── privacy/
-│   │   └── page.tsx
-│   ├── terms/
-│   │   └── page.tsx
-│   ├── globals.css
+
 │   ├── layout.tsx
-│   └── page.tsx
+
+│   ├── page.tsx
+
+│   └── globals.css
+
 ├── public/
+
 │   ├── favicon.png
+
 │   └── smart-notes-logo.png
-├── .env.local
+
 ├── next.config.ts
+
 ├── package.json
+
 └── README.md
+
 ```
 
-## Getting Started
 
-Clone the repository:
+
+\## Getting Started
+
+
+
+Clone the repository and install the dependencies:
+
+
 
 ```bash
+
 git clone https://github.com/zamarharoon/smart-notes-quiz.git
+
 cd smart-notes-quiz
-```
 
-Install dependencies:
-
-```bash
 npm install
+
 ```
 
-Create a `.env.local` file and configure the required environment variables.
 
-Then run the development server:
 
-```bash
-npm run dev
-```
+Create a `.env.local` file and add the required environment variables:
 
-Open:
+
 
 ```text
-http://localhost:3000
+
+GEMINI\_API\_KEY=your\_gemini\_api\_key
+
+UPSTASH\_REDIS\_REST\_URL=your\_upstash\_url
+
+UPSTASH\_REDIS\_REST\_TOKEN=your\_upstash\_token
+
 ```
 
-## Scripts
 
-Run the development server:
+
+Never commit `.env.local` or API keys to GitHub.
+
+
+
+Start the development server:
+
+
 
 ```bash
+
 npm run dev
+
 ```
 
-Run ESLint:
 
-```bash
-npm run lint
+
+Then open:
+
+
+
+```text
+
+http://localhost:3000
+
 ```
 
-Create a production build:
 
-```bash
-npm run build
-```
 
-Run the production server:
+\## Testing
 
-```bash
-npm run start
-```
 
-## Testing & Verification
 
 The application has been tested for:
 
-* Manual notes input
-* Quiz generation
-* PDF upload
-* DOCX upload
-* TXT upload
-* File size validation
-* Empty input validation
-* Insufficient notes validation
-* Quiz answer feedback
-* Score calculation
-* Quiz History
-* Clear History
-* API error handling
-* API rate limiting
-* Mobile responsiveness
-* Production deployment
 
-The final production verification was completed on the deployed Vercel application.
 
-## Deployment
+\* Manual notes input
+
+\* PDF, DOCX, and TXT uploads
+
+\* File size validation
+
+\* Empty and invalid input validation
+
+\* AI quiz generation
+
+\* Local fallback generation
+
+\* Answer selection
+
+\* Answer feedback
+
+\* Quiz results
+
+\* Try Again functionality
+
+\* Quiz history
+
+\* Rate limiting
+
+\* Security headers
+
+\* Production deployment
+
+\* HTTPS
+
+\* Live Gemini-powered quiz generation
+
+
+
+\## Deployment
+
+
 
 The application is deployed using Vercel.
 
-Live application:
+
+
+Production application:
+
+
 
 https://smart-notes-quiz.vercel.app/
 
-The `/api/generate-quiz` route runs server-side as a Next.js serverless API function.
 
-## Future Improvements
 
-Planned improvements include:
+Source code:
 
-* AI-powered quiz generation when API credits are available
-* More advanced question generation
-* Additional file formats
-* User authentication
-* Cloud-based quiz history
-* More quiz customization options
 
-## Current Status
 
-**APP COMPLETE ✅**
+https://github.com/zamarharoon/smart-notes-quiz
 
-The application development phase is complete and the project is ready for portfolio presentation.
 
-## License
 
-This project is currently intended as a personal learning and portfolio project.
+\## Current Status
+
+
+
+\*\*APP COMPLETE\*\*
+
+
+
+The application is deployed and running with Google Gemini AI-powered quiz generation, server-side API handling, security controls, and a local fallback generator.
+
+
+
+\## Future Improvements
+
+
+
+Possible future improvements include:
+
+
+
+\* User accounts and authentication
+
+\* Server-side database for quiz history
+
+\* AI usage and token tracking
+
+\* Persistent user data
+
+\* More quiz question types
+
+\* Difficulty selection
+
+\* More advanced analytics
+
+\* Improved AI prompt customization
+
+\* Additional file formats
+
+
 
